@@ -7,11 +7,7 @@ import Form from "@/components/Forms/Form";
 import FormInput from "@/components/Forms/FormInput";
 import { SubmitHandler } from "react-hook-form";
 import { useUserLoginMutation } from "@/redux/api/authApi";
-import {
-  getUserInfo,
-  isLoggedIn,
-  storeUserInfo,
-} from "@/services/auth.service";
+import { storeUserInfo } from "@/services/auth.service";
 import { useRouter } from "next/navigation";
 
 type FormValues = {
@@ -25,28 +21,19 @@ const LoginPage = () => {
 
   const onsSubmit: SubmitHandler<FormValues> = async (data: any) => {
     try {
-      const res = await userLogin({
-        ...data,
-      }).unwrap();
+      const res = await userLogin({ ...data }).unwrap();
 
-      if (res?.data?.accessToken) {
+      if (res?.accessToken) {
         router.push("/profile");
       }
-      //
 
-      storeUserInfo({ accessToken: res?.data?.accessToken });
+      storeUserInfo({ accessToken: res?.accessToken });
     } catch (error) {
       console.log(error);
     }
   };
   return (
-    <Row
-      justify="center"
-      align="middle"
-      style={{
-        minHeight: "100vh",
-      }}
-    >
+    <Row justify="center" align="middle" style={{ minHeight: "100vh" }}>
       <Col sm={12} md={16} lg={10}>
         <Image src={loginImage} width={500} alt="" />
       </Col>
